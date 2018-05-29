@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DoorDashLite</string>
+    <string name="discover_activity_name">Discover</string>
+</resources>
