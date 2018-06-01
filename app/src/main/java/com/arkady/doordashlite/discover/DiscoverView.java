@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.arkady.doordashlite.R;
+import com.arkady.doordashlite.data.model.Favorites;
 import com.arkady.doordashlite.data.model.Restaurant;
 
 import java.util.List;
@@ -54,6 +55,11 @@ public class DiscoverView extends FrameLayout implements DiscoverContract.View {
             @Override
             public void onRestaurantClicked(android.view.View view, Restaurant restaurant) {
                 mPresenter.onRestaurantSelected(restaurant);
+            }
+
+            @Override
+            public void onFavoriteClicked(Restaurant restaurant) {
+                mPresenter.onFavoriteClicked(restaurant);
             }
         });
 
@@ -101,6 +107,12 @@ public class DiscoverView extends FrameLayout implements DiscoverContract.View {
     @Override
     public void showNoRestaurants() {
         mError.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void updateFavorites(Favorites favorites) {
+        mListView.setFavorites(favorites);
+
     }
 
     @Override

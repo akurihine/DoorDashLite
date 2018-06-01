@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="130dp"
     android:layout_margin="3dp"
     android:orientation="horizontal"
     android:padding="16dp"
@@ -49,15 +49,27 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:textSize="13sp"
-            android:maxLines="1"
-            android:textStyle="italic"
-            android:ellipsize="end"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_weight="1"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:textStyle="italic"
+                android:ellipsize="end"/>
+
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.arkady.doordashlite.R;
+import com.arkady.doordashlite.data.model.Favorites;
 import com.arkady.doordashlite.data.model.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,9 +30,11 @@ public class DiscoverListView extends FrameLayout{
     private SearchResultsListener mListener;
     private DiscoverRecyclerViewAdapter mAdapter;
     private List<Restaurant> mRestaurantList;
+    private Favorites mFavorites = new Favorites(new ArrayList<Integer>());
 
     public interface SearchResultsListener {
         void onRestaurantClicked(View view, Restaurant restaurant);
+        void onFavoriteClicked(Restaurant restaurant);
     }
 
     public DiscoverListView(@NonNull Context context) {
@@ -63,15 +67,33 @@ public class DiscoverListView extends FrameLayout{
     }
 
     public void setData(List<Restaurant> restaurantList) {
+        setData(restaurantList, true);
+    }
+
+    public void setData(List<Restaurant> restaurantList, boolean isAllNewData) {
         mRestaurantList = restaurantList;
 
-        if (mAdapter == null) {
-            mAdapter = new DiscoverRecyclerViewAdapter();
-            mRecyclerView.setAdapter(mAdapter);
+        if (isAllNewData) {
+            if (mAdapter == null) {
+                mAdapter = new DiscoverRecyclerViewAdapter();
+                mRecyclerView.setAdapter(mAdapter);
+            } else {
+                mRecyclerView.scrollToPosition(0);
+                mAdapter.notifyDataSetChanged();
+            }
         } else {
-            mRecyclerView.scrollToPosition(0);
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    public void setFavorites(Favorites favorites) {
+        if (favorites != null) {
+            mFavorites = favorites;
+        } else {
+            mFavorites = new Favorites(new ArrayList<Integer>());
+        }
+
+        if (mAdapter != null) mAdapter.notifyDataSetChanged();
     }
 
     public void setListener(SearchResultsListener listener) {
@@ -90,7 +112,7 @@ public class DiscoverListView extends FrameLayout{
 
         @Override
         public void onBindViewHolder(RestaurantViewHolder holder, int position) {
-            holder.discoverItemView.setRestaurant(mRestaurantList.get(position));
+            holder.discoverItemView.setRestaurant(mRestaurantList.get(position), mFavorites.getIds().contains(mRestaurantList.get(position).getId()));
         }
 
         @Override
@@ -109,6 +131,12 @@ public class DiscoverListView extends FrameLayout{
             public RestaurantViewHolder(DiscoverItemView itemView) {
                 super(itemView);
                 itemView.setOnClickListener(this);
+                itemView.setListener(new DiscoverItemView.Listener() {
+                    @Override
+                    public void onFavoriteClicked(Restaurant restaurant) {
+                        mListener.onFavoriteClicked(restaurant);
+                    }
+                });
                 discoverItemView = itemView;
             }
 
